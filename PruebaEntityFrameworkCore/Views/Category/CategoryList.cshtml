@@ -1,0 +1,38 @@
+@model List<CategoryProductModel>
+@{
+    ViewData["Title"] = "Lista de la categoría";
+    int numero = 0;
+}
+
+<h1>Lista de Categoria del Producto</h1>
+<a class="btn btn-outline-primary" asp-action="CategoryAdd" asp-asp-controller="Category">Agregar Categoría</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+        {
+            numero++;
+        }
+            <tr>
+                <th scope="row">@numero
+                </th>
+                <td>@p.Name</td>
+                <td>@p.Description</td>
+                <td>
+                    <a class="btn btn-outline-info" asp-action="CategoryEdit" asp-controller="Category" asp-route-id="@p.Id">Editar</a>
+                    <a class="btn btn-outline-danger" asp-action="CategoryDeleted" asp-controller="Category" asp-route-id="@p.Id">Borrar</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
