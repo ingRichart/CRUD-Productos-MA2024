@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PruebaEntityFrameworkCore.Entidades;
 using PruebaEntityFrameworkCore.Models;
@@ -18,23 +19,33 @@ namespace PruebaEntityFrameworkCore.Controllers
             this._context = context;
         }
 
-        public IActionResult ProductList()
+        public async Task<IActionResult> ProductList()
         {
             List<ProductModel> products 
-            = _context.Productos.Select(product => new ProductModel()
+            = await _context.Productos
+            .Include(p => p.Categoria)
+            .Select(product => new ProductModel()
             {
                 Id = product.Id,
                 Name = product.Nombre,
                 Quantity = product.Cantidad,
-                Description = product.Descripcion
-            }).ToList();
+                Price = product.Precio,
+                Description = product.Descripcion,
+                CategoriaName = product.Categoria.Nombre
+            }).ToListAsync();
 
             return View(products);
         }   
 
-        public IActionResult ProductAdd()
+        public async Task<IActionResult> ProductAdd()
         {
-            return View();
+            ProductModel product = new ProductModel();
+            product.ListaCategorias = 
+            await _context.Categorias.Select(c => new SelectListItem()
+            { Value = c.Id.ToString(), Text = c.Nombre }
+            ).ToListAsync();
+
+            return View(product);
         }
 
         [HttpPost]
