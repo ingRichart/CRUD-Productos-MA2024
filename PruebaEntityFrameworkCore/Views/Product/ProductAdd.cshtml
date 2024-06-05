@@ -17,15 +17,17 @@
         <label asp-for="Quantity">Cantidad del Producto</label>
     </div>
     <div class="form-floating mb-3">
+        <input type="text" class="form-control" asp-for="Price" placeholder="Precio del Producto" aria-label="Amount (to the nearest dollar)">
+        <label asp-for="Price">Precio del Producto</label>
+    </div>
+    <div class="form-floating mb-3">
         <input type="textarea" class="form-control" asp-for="Description" rows="5">
         <label asp-for="Description">Descripcion</label>
     </div>
-@*     
-    <div class="form-floating mb-3">
-        <input type="date" class="form-control" asp-for="CreationDate" >
-        <label asp-for="CreationDate">Cantidad del Producto</label>
-    </div>
- *@
+    <select class="form-select mb-3" asp-for="CategoriaId" asp-items="@Model.ListaCategorias" >
+        <option>Seleccionar categoria</option>
+    </select>
+
     <button class="btn btn-outline-primary">Guardar</button>
     <a class="btn btn-outline-secundary" asp-action="ProductList" asp-controller="Product">Regresar</a>
 </form>
