@@ -41,15 +41,15 @@ namespace PruebaEntityFrameworkCore.Controllers
         {
             ProductModel product = new ProductModel();
             product.ListaCategorias = 
-            await _context.Categorias.Select(c => new SelectListItem()
-            { Value = c.Id.ToString(), Text = c.Nombre }
-            ).ToListAsync();
+                await _context.Categorias.Select(c => new SelectListItem()
+                { Value = c.Id.ToString(), Text = c.Nombre }
+                ).ToListAsync();
 
             return View(product);
         }
 
         [HttpPost]
-        public IActionResult ProductAdd(ProductModel product)
+        public async Task<IActionResult> ProductAdd(ProductModel product)
         {
             if (!ModelState.IsValid)
             {
@@ -61,17 +61,19 @@ namespace PruebaEntityFrameworkCore.Controllers
             productEntity.Nombre = product.Name;
             productEntity.Cantidad = product.Quantity;
             productEntity.Descripcion = product.Description;
+            productEntity.Precio = product.Price;
+            productEntity.CategoriaId = product.CategoriaId;
 
             this._context.Productos.Add(productEntity);
-            this._context.SaveChanges();
+            await this._context.SaveChangesAsync();
             
             return RedirectToAction("ProductList","Product");
         }
 
-        public IActionResult ProductEdit(Guid Id)
+        public async Task<IActionResult> ProductEdit(Guid Id)
         {
-            Producto? product = this._context.Productos
-            .Where(p => p.Id == Id).FirstOrDefault();
+            Producto? product = await this._context.Productos
+            .Where(p => p.Id == Id).FirstOrDefaultAsync();
             
             if (product == null)
             {
@@ -83,40 +85,50 @@ namespace PruebaEntityFrameworkCore.Controllers
             model.Name = product.Nombre;
             model.Quantity = product.Cantidad;
             model.Description = product.Descripcion;
+            model.Price = product.Precio;
+            model.CategoriaId  = product.CategoriaId;
+            
+            model.ListaCategorias = 
+                await _context.Categorias.Select(c => new SelectListItem()
+                { Value = c.Id.ToString(), Text = c.Nombre }
+                ).ToListAsync();
+            
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult ProductEdit(ProductModel product)
+        public async Task<IActionResult> ProductEdit(ProductModel product)
         {
-            // bool exits = this._context.Productos.Any(p => p.Id == product.Id);
-            // if (!exits)
-            // {
-            //     return View(product);
-            // }
+            bool exits = await this._context.Productos.AnyAsync(p => p.Id == product.Id);
+            if (!exits)
+            {
+                return View(product);
+            }
             
-            // if (!ModelState.IsValid)
-            // {
-            //     return View(product);
-            // }
+            if (!ModelState.IsValid)
+            {
+                return View(product);
+            }
 
-            Producto productEntity = this._context.Productos
-            .Where(p => p.Id == product.Id).First();
+            Producto productEntity = await this._context.Productos
+            .Where(p => p.Id == product.Id).FirstAsync();
             productEntity.Nombre = product.Name;
             productEntity.Cantidad = product.Quantity;
             productEntity.Descripcion = product.Description;
+            productEntity.Precio = product.Price;
+            productEntity.CategoriaId = product.CategoriaId;
 
             this._context.Productos.Update(productEntity);
-            this._context.SaveChanges();
+            await this._context.SaveChangesAsync();
             
             return RedirectToAction("ProductList","Product");
         }
 
-        public IActionResult ProductDeleted(Guid Id)
+        public async Task<IActionResult> ProductDeleted(Guid Id)
         {
-            Producto? product = this._context.Productos
-            .Where(p => p.Id == Id).FirstOrDefault();
+            Producto? product = await this._context.Productos
+            .Where(p => p.Id == Id).FirstOrDefaultAsync();
             
             if (product == null)
             {
@@ -128,32 +140,31 @@ namespace PruebaEntityFrameworkCore.Controllers
             model.Name = product.Nombre;
             model.Quantity = product.Cantidad;
             model.Description = product.Descripcion;
+            model.Price = product.Precio;
+            model.CategoriaId = product.CategoriaId;
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult ProductDeleted(ProductModel product)
+        public async Task<IActionResult> ProductDeleted(ProductModel product)
         {
-            // bool exits = this._context.Productos.Any(p => p.Id == product.Id);
-            // if (!exits)
-            // {
-            //     return View(product);
-            // }
-            
-            // if (!ModelState.IsValid)
-            // {
-            //     return View(product);
-            // }
+            bool exits = await this._context.Productos.AnyAsync(p => p.Id == product.Id);
+            if (!exits)
+            {
+                return View(product);
+            }
 
-            Producto productEntity = this._context.Productos
-            .Where(p => p.Id == product.Id).First();
+            Producto productEntity = await this._context.Productos
+            .Where(p => p.Id == product.Id).FirstAsync();
             productEntity.Nombre = product.Name;
             productEntity.Cantidad = product.Quantity;
             productEntity.Descripcion = product.Description;
+            productEntity.Precio = product.Price;
+            productEntity.CategoriaId = product.CategoriaId;
 
             this._context.Productos.Remove(productEntity);
-            this._context.SaveChanges();
+            await this._context.SaveChangesAsync();
             
             return RedirectToAction("ProductList","Product");
         }
