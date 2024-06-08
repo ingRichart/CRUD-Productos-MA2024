@@ -40,6 +40,7 @@ namespace PruebaEntityFrameworkCore.Controllers
         public async Task<IActionResult> ProductAdd()
         {
             ProductModel product = new ProductModel();
+            
             product.ListaCategorias = 
                 await _context.Categorias.Select(c => new SelectListItem()
                 { Value = c.Id.ToString(), Text = c.Nombre }

@@ -1,20 +1,19 @@
 @* Colocar el model como una List<> *@
-@model List<CategoryProductModel>
+@model List<SupplierModel>
 
 @{
-    ViewData["Title"] = "Lista de la categoría";
+    ViewData["Title"] = "Lista de la proveedores";
     int numero = 0;
 }
 
 <h1>@ViewData["Title"]</h1>
-<a class="btn btn-outline-primary" asp-action="CategoryAdd" asp-asp-controller="Category">Agregar Categoría</a>
+<a class="btn btn-outline-primary" asp-action="SupplierAdd" asp-asp-controller="Supplier">Agregar Proveedor</a>
 
 <table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">#</th>
             <th scope="col">Nombre</th>
-            <th scope="col">Descripción</th>
             <th scope="col">Acciones</th>
         </tr>
     </thead>
@@ -28,7 +27,6 @@
                 <th scope="row">@numero
                 </th>
                 <td>@p.Name</td>
-                <td>@p.Description</td>
                 <td>
                     @* Editar pasando el ID *@
                     <a class="btn btn-outline-info" asp-action="CategoryEdit" asp-controller="Category" asp-route-id="@p.Id">Editar</a>

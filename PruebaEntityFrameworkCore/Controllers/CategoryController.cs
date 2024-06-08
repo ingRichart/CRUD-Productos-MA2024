@@ -56,33 +56,53 @@ namespace PruebaEntityFrameworkCore.Controllers
 
         public IActionResult CategoryEdit(Guid Id)
         {
+            // SENTENCIA EN LINQ
             Categoria? category = this._context.Categorias
-            .Where(p => p.Id == Id).FirstOrDefault();
+                .Where(p => p.Id == Id).FirstOrDefault();
             
+            //VALIDACION SI NO LO ENCUENTRA 
             if (category == null)
             {
                 return RedirectToAction("CategoryList","Category");
             }
 
+            //Se asigna la info de la BD al MODELO.
             CategoryProductModel model = new CategoryProductModel();
             model.Id = category.Id;
             model.Name = category.Nombre;
             model.Description = category.Descripcion;
 
+            //PASAMOS LA INFORMACION AL MODELO
             return View(model);
         }
 
         [HttpPost]
         public IActionResult CategoryEdit(CategoryProductModel category)
         {
+            //Carga la información de la BD
             Categoria categoryEntity = this._context.Categorias
-            .Where(p => p.Id == category.Id).First();
+             .Where(p => p.Id == category.Id).First();
+
+            //VALIDACION
+            if (categoryEntity == null)
+            {
+                return View(category);
+            }
+            
+            if (!ModelState.IsValid)
+            {
+                return View(category);
+            }
+
+            //REmplaza lo del modelo en el objeto de la BD
             categoryEntity.Nombre = category.Name;
             categoryEntity.Descripcion = category.Description;
 
+            //Actualiza y guarda
             this._context.Categorias.Update(categoryEntity);
             this._context.SaveChanges();
             
+            //Muestra otravez la lista 
             return RedirectToAction("CategoryList","Category");
         }
 
@@ -96,6 +116,7 @@ namespace PruebaEntityFrameworkCore.Controllers
                 return RedirectToAction("CategoryList","Category");
             }
 
+
             CategoryProductModel model = new CategoryProductModel();
             model.Id = category.Id;
             model.Name = category.Nombre;
@@ -107,21 +128,15 @@ namespace PruebaEntityFrameworkCore.Controllers
         [HttpPost]
         public IActionResult CategoryDeleted(CategoryProductModel category)
         {
-            // bool exits = this._context.Productos.Any(p => p.Id == product.Id);
-            // if (!exits)
-            // {
-            //     return View(product);
-            // }
-            
-            // if (!ModelState.IsValid)
-            // {
-            //     return View(product);
-            // }
+            bool exits = this._context.Categorias.Any(p => p.Id == category.Id);
+            if (!exits)
+            {
+                return View(category);
+            }
+
 
             Categoria categoryEntity = this._context.Categorias
             .Where(p => p.Id == category.Id).First();
-            categoryEntity.Nombre = category.Name;
-            categoryEntity.Descripcion = category.Description;
 
             this._context.Categorias.Remove(categoryEntity);
             this._context.SaveChanges();

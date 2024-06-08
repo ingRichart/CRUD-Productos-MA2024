@@ -20,5 +20,9 @@ namespace PruebaEntityFrameworkCore.Entidades
         public Guid? CategoriaId { get; set; }
 
         public Categoria? Categoria { get; set; }
+
+        public Guid? ProveedorId { get; set;}
+
+        public Proveedor? Proveedor { get; set;}
     }
 }
