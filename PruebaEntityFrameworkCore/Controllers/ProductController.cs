@@ -13,9 +13,11 @@ namespace PruebaEntityFrameworkCore.Controllers
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(ApplicationDbContext context)
+        public ProductController(ApplicationDbContext context, ILogger<ProductController> logger)
         {
+            this._logger = logger;
             this._context = context;
         }
 
@@ -24,6 +26,7 @@ namespace PruebaEntityFrameworkCore.Controllers
             List<ProductModel> products 
             = await _context.Productos
             .Include(p => p.Categoria)
+            .Include(s => s.Proveedor)
             .Select(product => new ProductModel()
             {
                 Id = product.Id,
@@ -31,7 +34,8 @@ namespace PruebaEntityFrameworkCore.Controllers
                 Quantity = product.Cantidad,
                 Price = product.Precio,
                 Description = product.Descripcion,
-                CategoriaName = product.Categoria.Nombre
+                CategoriaName = product.Categoria.Nombre,
+                SupplierName = product.Proveedor.Nombre
             }).ToListAsync();
 
             return View(products);
@@ -46,24 +50,31 @@ namespace PruebaEntityFrameworkCore.Controllers
                 { Value = c.Id.ToString(), Text = c.Nombre }
                 ).ToListAsync();
 
+            product.ListSuppliers = 
+                _context.Proveedores.Select(p => new SelectListItem()
+                { Value = p.Id.ToString(), Text = p.Nombre }
+                ).ToList();
+
             return View(product);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProductAdd(ProductModel product)
+        public async Task<IActionResult> ProductAdd(ProductModel productModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(product);
+                _logger.LogInformation("El modelo del producto no es valido");
+                return View(productModel);
             }
 
             var productEntity = new Producto();
             productEntity.Id = new Guid();
-            productEntity.Nombre = product.Name;
-            productEntity.Cantidad = product.Quantity;
-            productEntity.Descripcion = product.Description;
-            productEntity.Precio = product.Price;
-            productEntity.CategoriaId = product.CategoriaId;
+            productEntity.Nombre = productModel.Name;
+            productEntity.Cantidad = productModel.Quantity;
+            productEntity.Descripcion = productModel.Description;
+            productEntity.Precio = productModel.Price;
+            productEntity.CategoriaId = productModel.CategoriaId;
+            productEntity.ProveedorId = productModel.SupplierId;
 
             this._context.Productos.Add(productEntity);
             await this._context.SaveChangesAsync();
@@ -88,10 +99,16 @@ namespace PruebaEntityFrameworkCore.Controllers
             model.Description = product.Descripcion;
             model.Price = product.Precio;
             model.CategoriaId  = product.CategoriaId;
+            model.SupplierId = product.ProveedorId;
             
             model.ListaCategorias = 
                 await _context.Categorias.Select(c => new SelectListItem()
                 { Value = c.Id.ToString(), Text = c.Nombre }
+                ).ToListAsync();
+            
+            model.ListSuppliers = 
+                await _context.Proveedores.Select(s => new SelectListItem()
+                { Value = s.Id.ToString(), Text = s.Nombre }
                 ).ToListAsync();
             
 
@@ -99,26 +116,27 @@ namespace PruebaEntityFrameworkCore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProductEdit(ProductModel product)
+        public async Task<IActionResult> ProductEdit(ProductModel productModel)
         {
-            bool exits = await this._context.Productos.AnyAsync(p => p.Id == product.Id);
+            bool exits = await this._context.Productos.AnyAsync(p => p.Id == productModel.Id);
             if (!exits)
             {
-                return View(product);
+                return View(productModel);
             }
             
             if (!ModelState.IsValid)
             {
-                return View(product);
+                return View(productModel);
             }
 
             Producto productEntity = await this._context.Productos
-            .Where(p => p.Id == product.Id).FirstAsync();
-            productEntity.Nombre = product.Name;
-            productEntity.Cantidad = product.Quantity;
-            productEntity.Descripcion = product.Description;
-            productEntity.Precio = product.Price;
-            productEntity.CategoriaId = product.CategoriaId;
+            .Where(p => p.Id == productModel.Id).FirstAsync();
+            productEntity.Nombre = productModel.Name;
+            productEntity.Cantidad = productModel.Quantity;
+            productEntity.Descripcion = productModel.Description;
+            productEntity.Precio = productModel.Price;
+            productEntity.CategoriaId = productModel.CategoriaId;
+            productEntity.ProveedorId = productModel.SupplierId;
 
             this._context.Productos.Update(productEntity);
             await this._context.SaveChangesAsync();
@@ -140,9 +158,6 @@ namespace PruebaEntityFrameworkCore.Controllers
             model.Id = product.Id;
             model.Name = product.Nombre;
             model.Quantity = product.Cantidad;
-            model.Description = product.Descripcion;
-            model.Price = product.Precio;
-            model.CategoriaId = product.CategoriaId;
 
             return View(model);
         }

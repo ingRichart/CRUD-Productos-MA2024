@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PruebaEntityFrameworkCore.Entidades;
 using PruebaEntityFrameworkCore.Models;
 
@@ -11,20 +12,22 @@ namespace PruebaEntityFrameworkCore.Controllers
     public class SupplierController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<SupplierController> _logger;
 
-        public SupplierController(ApplicationDbContext context)
+        public SupplierController(ApplicationDbContext context, ILogger<SupplierController> logger)
         {
+            this._logger = logger;
             this._context = context;
         }
 
-        public IActionResult SupplierList()
+        public async Task<IActionResult> SupplierList()
         {
             List<SupplierModel> categories 
-            = _context.Proveedores.Select(Supplier => new SupplierModel()
+            = await _context.Proveedores.Select(Supplier => new SupplierModel()
             {
                 Id = Supplier.Id,
                 Name = Supplier.Nombre
-            }).ToList();
+            }).ToListAsync();
 
             return View(categories);
         }   
@@ -35,10 +38,11 @@ namespace PruebaEntityFrameworkCore.Controllers
         }
 
         [HttpPost]
-        public IActionResult SupplierAdd(SupplierModel Supplier)
+        public async Task<IActionResult> SupplierAdd(SupplierModel Supplier)
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogInformation("No es valido el modelo de proveedores");
                 return View(Supplier);
             }
 
@@ -46,7 +50,7 @@ namespace PruebaEntityFrameworkCore.Controllers
             SupplierEntity.Id = new Guid();
             SupplierEntity.Nombre = Supplier.Name;
 
-            this._context.Proveedores.Add(SupplierEntity);
+            await this._context.Proveedores.AddAsync(SupplierEntity);
             this._context.SaveChanges();
             
             return RedirectToAction("SupplierList","Supplier");

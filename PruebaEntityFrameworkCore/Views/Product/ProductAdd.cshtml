@@ -29,6 +29,11 @@
         <option>Seleccionar categoria</option>
     </select>
 
+    <select class="form-select mb-3" asp-for="SupplierId" asp-items="@Model.ListSuppliers">
+        <option>Seleccionar proveedor</option>
+    </select>
+
+
     <button class="btn btn-outline-primary">Guardar</button>
     <a class="btn btn-outline-secundary" asp-action="ProductList" asp-controller="Product">Regresar</a>
 </form>

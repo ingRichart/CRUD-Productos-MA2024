@@ -4,7 +4,6 @@
     ViewData["Title"] = "Borrar el producto";
 }
 
-
 <h3 class="mb-3"></h3>
 
 <form asp-asp-controller="Product" asp-action="ProductDeleted">
@@ -19,6 +18,6 @@
 
 
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Borrar</button>
-    <a class="btn btn-secondary" asp-action="ProductList" sp-controller="Product">Cancelar</a>
+    <button type="submit" class="btn btn-outline-danger">Borrar</button>
+    <a class="btn btn-outline-secondary" asp-action="ProductList" sp-controller="Product">Cancelar</a>
 </form>

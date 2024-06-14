@@ -11,6 +11,7 @@ namespace PruebaEntityFrameworkCore.Models
         public ProductModel()
         {
             ListaCategorias = new List<SelectListItem>();
+           ListSuppliers = new List<SelectListItem>();
         }
 
         public Guid Id { get; set; }
@@ -30,5 +31,14 @@ namespace PruebaEntityFrameworkCore.Models
         public string? CategoriaName { get; set; }
 
         public List<SelectListItem> ListaCategorias { get; set; }
-    }
+
+        public Guid? SupplierId { get; set; }
+
+        public SupplierModel? SupplierModel { get; set; }
+
+        public string? SupplierName { get; set; }    
+
+        public List<SelectListItem> ListSuppliers { get; set;}
+
+    }    
 }
