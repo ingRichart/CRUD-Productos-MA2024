@@ -15,7 +15,7 @@ namespace PruebaEntityFrameworkCore.Entidades
 
         public string Descripcion { get; set;}
 
-        public decimal Precio { get; set; }
+        public float Precio { get; set; }
 
         public Guid? CategoriaId { get; set; }
 

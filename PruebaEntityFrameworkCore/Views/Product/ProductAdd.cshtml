@@ -11,29 +11,45 @@
     <div class="form-floating mb-3">
         <input type="text" class="form-control" asp-for="Name" placeholder="Nombre del producto">
         <label asp-for="Name">Nombre del Producto</label>
+        <span asp-validation-for="Name" class="text-danger" ></span>
     </div>
+
     <div class="form-floating mb-3">
         <input type="text" class="form-control" asp-for="Quantity" placeholder="Cantidad del Producto">
         <label asp-for="Quantity">Cantidad del Producto</label>
+        <span asp-validation-for="Quantity" class="text-danger" ></span>
     </div>
+    
     <div class="form-floating mb-3">
         <input type="text" class="form-control" asp-for="Price" placeholder="Precio del Producto" aria-label="Amount (to the nearest dollar)">
         <label asp-for="Price">Precio del Producto</label>
+        <span asp-validation-for="Price" class="text-danger" ></span>
     </div>
+
     <div class="form-floating mb-3">
         <input type="textarea" class="form-control" asp-for="Description" rows="5">
         <label asp-for="Description">Descripcion</label>
+        <span asp-validation-for="Description" class="text-danger" ></span>
     </div>
     
-    <select class="form-select mb-3" asp-for="CategoriaId" asp-items="@Model.ListaCategorias" >
-        <option>Seleccionar categoria</option>
-    </select>
+    <div class="mb-3">
+        <select class="form-select" asp-for="CategoriaId" asp-items="@Model.ListaCategorias" >
+            <option>Seleccionar categoria</option>
+        </select>
+        <span asp-validation-for="CategoriaId" class="text-danger" ></span>
+    </div>
 
-    <select class="form-select mb-3" asp-for="SupplierId" asp-items="@Model.ListSuppliers">
-        <option>Seleccionar proveedor</option>
-    </select>
-
+    <div class="mb-3">
+        <select class="form-select" asp-for="SupplierId" asp-items="@Model.ListSuppliers">
+            <option>Seleccionar proveedor</option>
+        </select>
+        <span asp-validation-for="SupplierId" class="text-danger" ></span>
+    </div>
 
     <button class="btn btn-outline-primary">Guardar</button>
     <a class="btn btn-outline-secundary" asp-action="ProductList" asp-controller="Product">Regresar</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

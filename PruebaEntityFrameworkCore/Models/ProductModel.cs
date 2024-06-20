@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,15 +17,24 @@ namespace PruebaEntityFrameworkCore.Models
 
         public Guid Id { get; set; }
 
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Display(Name = "Nombre")]
         public string Name { get; set; }
 
+        [Display(Name = "Cantidad")]
+        [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor que 0")]
         public int Quantity { get; set; }
 
-        public string? Description { get; set; }
+        [Required(ErrorMessage = "El campo {0} es requerido ")]
+        [Display(Name = "Descripción ")]
+        public string Description { get; set; }
 
-        public decimal Price { get; set; }
+        [Display(Name = "Precio")]
+        [Range(1, float.MaxValue, ErrorMessage = "El precio debe ser mayor que 0")]  
+        public float Price { get; set; }
 
-        public Guid? CategoriaId { get; set; }
+        [Required(ErrorMessage = "El campo {0} es requerido ")]
+        public Guid CategoriaId { get; set; }
 
         public CategoryProductModel? Categoria { get; set; }
 
@@ -32,7 +42,8 @@ namespace PruebaEntityFrameworkCore.Models
 
         public List<SelectListItem> ListaCategorias { get; set; }
 
-        public Guid? SupplierId { get; set; }
+        [Required(ErrorMessage = "El campo {0} es requerido ")]
+        public Guid SupplierId { get; set; }
 
         public SupplierModel? SupplierModel { get; set; }
 

@@ -63,7 +63,19 @@ namespace PruebaEntityFrameworkCore.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogInformation("El modelo del producto no es valido");
+                _logger.LogError("El modelo del producto no es valido");
+
+                productModel.ListaCategorias = 
+                    await _context.Categorias.Select(c => new SelectListItem()
+                    { Value = c.Id.ToString(), Text = c.Nombre }
+                    ).ToListAsync();
+
+                productModel.ListSuppliers = 
+                    _context.Proveedores.Select(p => new SelectListItem()
+                    { Value = p.Id.ToString(), Text = p.Nombre }
+                    ).ToList();
+
+
                 return View(productModel);
             }
 
@@ -89,6 +101,7 @@ namespace PruebaEntityFrameworkCore.Controllers
             
             if (product == null)
             {
+                _logger.LogError("No se encontro el producto");
                 return RedirectToAction("ProductList","Product");
             }
 
@@ -98,9 +111,15 @@ namespace PruebaEntityFrameworkCore.Controllers
             model.Quantity = product.Cantidad;
             model.Description = product.Descripcion;
             model.Price = product.Precio;
-            model.CategoriaId  = product.CategoriaId;
-            model.SupplierId = product.ProveedorId;
-            
+            if (product.CategoriaId.HasValue)
+            {
+                model.CategoriaId  =  product.CategoriaId.Value;
+            }
+            if (product.ProveedorId.HasValue)
+            {
+                model.SupplierId  =  product.ProveedorId.Value;
+            }
+
             model.ListaCategorias = 
                 await _context.Categorias.Select(c => new SelectListItem()
                 { Value = c.Id.ToString(), Text = c.Nombre }
@@ -121,11 +140,23 @@ namespace PruebaEntityFrameworkCore.Controllers
             bool exits = await this._context.Productos.AnyAsync(p => p.Id == productModel.Id);
             if (!exits)
             {
+                _logger.LogError("No se encontro el producto");
                 return View(productModel);
             }
             
             if (!ModelState.IsValid)
             {
+                productModel.ListaCategorias = 
+                    await _context.Categorias.Select(c => new SelectListItem()
+                    { Value = c.Id.ToString(), Text = c.Nombre }
+                    ).ToListAsync();
+
+                productModel.ListSuppliers = 
+                    _context.Proveedores.Select(p => new SelectListItem()
+                    { Value = p.Id.ToString(), Text = p.Nombre }
+                    ).ToList();
+
+                _logger.LogError("El modelo no es valido");
                 return View(productModel);
             }
 
@@ -151,6 +182,7 @@ namespace PruebaEntityFrameworkCore.Controllers
             
             if (product == null)
             {
+                _logger.LogError("No se encontro el producto");
                 return RedirectToAction("ProductList","Product");
             }
 
@@ -168,16 +200,12 @@ namespace PruebaEntityFrameworkCore.Controllers
             bool exits = await this._context.Productos.AnyAsync(p => p.Id == product.Id);
             if (!exits)
             {
+                _logger.LogError("No se encontro el producto");
                 return View(product);
             }
 
             Producto productEntity = await this._context.Productos
             .Where(p => p.Id == product.Id).FirstAsync();
-            productEntity.Nombre = product.Name;
-            productEntity.Cantidad = product.Quantity;
-            productEntity.Descripcion = product.Description;
-            productEntity.Precio = product.Price;
-            productEntity.CategoriaId = product.CategoriaId;
 
             this._context.Productos.Remove(productEntity);
             await this._context.SaveChangesAsync();
