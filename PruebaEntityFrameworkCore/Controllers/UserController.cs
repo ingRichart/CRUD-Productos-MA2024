@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using PruebaEntityFrameworkCore.Models;
+using PruebaEntityFrameworkCore.Services;
 
 namespace PruebaEntityFrameworkCore.Controllers
 {
@@ -117,6 +120,43 @@ namespace PruebaEntityFrameworkCore.Controllers
             userListViewModel.UserList = userList;
 
             return View(userListViewModel);
+        }
+
+
+        [HttpPost]
+        // [Authorize(Roles = Constantes.RolAdmin)]
+        public  async Task<IActionResult> HacerAdmin(string email)
+        {
+            var usuario = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (usuario is null)
+            {
+                return NotFound();
+            }
+
+            await _userManager.AddToRoleAsync(usuario, MyConstants.RolAdmin);
+
+            return RedirectToAction("List", 
+                routeValues: new { Message = "Rol asignado correctamente a " + email });
+        }
+
+        [HttpPost]
+        // [Authorize(Roles = Constantes.RolAdmin)]
+        public async Task<IActionResult> RemoverAdmin(string email)
+        {
+            var usuario = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (usuario is null)
+            {
+                return NotFound();
+            }
+
+            await _userManager.RemoveFromRoleAsync(usuario, MyConstants.RolAdmin);
+
+            return RedirectToAction("List",
+                routeValues: new { Message = "Rol removido correctamente a " + email });
         }
     }
 }
