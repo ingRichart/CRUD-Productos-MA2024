@@ -14,13 +14,16 @@ namespace PruebaEntityFrameworkCore.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public UserController(
             UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext context)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
+            this._context = context;
         }
 
         [AllowAnonymous]
@@ -97,6 +100,23 @@ namespace PruebaEntityFrameworkCore.Controllers
         {
             await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
             return RedirectToAction("Index", "Home");
+        }
+
+
+        public IActionResult List()
+        {
+            var userList = this._context.Users.Select(x => new UserViewModel
+            {
+                User = x.UserName,
+                Email = x.Email,
+                Confirmed = x.EmailConfirmed
+
+            }).ToList();
+
+            var userListViewModel    = new UserListViewModel();
+            userListViewModel.UserList = userList;
+
+            return View(userListViewModel);
         }
     }
 }

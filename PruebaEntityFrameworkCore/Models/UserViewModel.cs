@@ -7,11 +7,15 @@ namespace PruebaEntityFrameworkCore.Models
 {
     public class UserViewModel
     {
+        public UserViewModel()
+        {
+            
+        }
         public string User { get; set; }
 
         public string Email { get; set;}
 
-        public bool EmailConfirmed { get; set; }
+        public bool Confirmed { get; set; }
 
     }
 }
