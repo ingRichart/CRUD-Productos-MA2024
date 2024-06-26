@@ -106,20 +106,22 @@ namespace PruebaEntityFrameworkCore.Controllers
         }
 
 
-        public IActionResult List()
+        public async Task<IActionResult> List(string confirmed = null, string remove = null)
         {
-            var userList = this._context.Users.Select(x => new UserViewModel
+            var userList = await this._context.Users.Select(x => new UserViewModel
             {
                 User = x.UserName,
                 Email = x.Email,
                 Confirmed = x.EmailConfirmed
 
-            }).ToList();
+            }).ToListAsync();
 
-            var userListViewModel    = new UserListViewModel();
-            userListViewModel.UserList = userList;
+            var modelo = new UserListViewModel();
+            modelo.UserList = userList;
+            modelo.MessageConfirmed = confirmed;
+            modelo.MessageRemoved = remove;
 
-            return View(userListViewModel);
+            return View(modelo);
         }
 
 
@@ -137,8 +139,8 @@ namespace PruebaEntityFrameworkCore.Controllers
 
             await _userManager.AddToRoleAsync(usuario, MyConstants.RolAdmin);
 
-            return RedirectToAction("List", 
-                routeValues: new { Message = "Rol asignado correctamente a " + email });
+            return RedirectToAction("List",
+                routeValues: new { confirmed = "Rol asignado correctamente a " + email, remove = ""  });
         }
 
         [HttpPost]
@@ -156,7 +158,7 @@ namespace PruebaEntityFrameworkCore.Controllers
             await _userManager.RemoveFromRoleAsync(usuario, MyConstants.RolAdmin);
 
             return RedirectToAction("List",
-                routeValues: new { Message = "Rol removido correctamente a " + email });
+                routeValues: new { confirmed = "", remove = "Rol removido correctamente a " + email });
         }
     }
 }

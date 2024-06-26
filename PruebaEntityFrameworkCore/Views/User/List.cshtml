@@ -7,11 +7,18 @@
 
 <h1>Listado de usuarios</h1>
 
-@if (Model.Message is not null)
+@if (Model.MessageConfirmed is not null || Model.MessageConfirmed == "")
 {
     <div class="alert alert-success" role="alert">
-        @Model.Message
+        @Model.MessageConfirmed
     </div>
+}
+
+@if (Model.MessageRemoved is not null || Model.MessageRemoved == "")
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.MessageRemoved
+    </div>  
 }
 
 @if (Model.UserList is not null)

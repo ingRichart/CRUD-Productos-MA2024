@@ -14,6 +14,7 @@ namespace PruebaEntityFrameworkCore.Models
         
         public List<UserViewModel> UserList { get; set; }
 
-        public string Message { get; set; }
+        public string MessageConfirmed { get; set; }
+        public string MessageRemoved { get; set; }
     }
 }
