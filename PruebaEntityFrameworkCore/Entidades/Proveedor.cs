@@ -7,6 +7,12 @@ namespace PruebaEntityFrameworkCore.Entidades
 {
     public class Proveedor
     {
+        public Proveedor()
+        {
+            Nombre = string.Empty;
+            Productos = new List<Producto>();
+        }
+
         public Guid Id { get; set; }
 
         public string Nombre { get; set; }

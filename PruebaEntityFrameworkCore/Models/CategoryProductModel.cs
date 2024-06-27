@@ -7,6 +7,10 @@ namespace PruebaEntityFrameworkCore.Models
 {
     public class CategoryProductModel
     {
+        public CategoryProductModel()
+        {
+        }
+
         public Guid Id { get; set; }
 
         public string Name { get; set; }

@@ -9,6 +9,9 @@ namespace PruebaEntityFrameworkCore.Models
     {
         public UserListViewModel()
         {
+            UserList = new List<UserViewModel>();
+            MessageConfirmed = string.Empty;
+            MessageRemoved = string.Empty;
 
         }
         

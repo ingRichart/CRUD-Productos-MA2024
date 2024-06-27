@@ -8,6 +8,10 @@ namespace PruebaEntityFrameworkCore.Models
 {
     public class RegistryViewModel
     {
+        public RegistryViewModel()
+        {
+        }
+
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [EmailAddress(ErrorMessage = "El ampo debe ser un correo electrónico valido")]
         public string Email { get; set; }

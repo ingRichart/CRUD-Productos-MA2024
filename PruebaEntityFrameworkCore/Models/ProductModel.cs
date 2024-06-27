@@ -12,7 +12,7 @@ namespace PruebaEntityFrameworkCore.Models
         public ProductModel()
         {
             ListaCategorias = new List<SelectListItem>();
-           ListSuppliers = new List<SelectListItem>();
+            ListSuppliers = new List<SelectListItem>();
         }
 
         public Guid Id { get; set; }

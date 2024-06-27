@@ -1,31 +1,53 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <span class="nav-link text-dark">Hola, @User.Identity.Name</span>
-        </li>
-        <li class="nav-item">
+
+<div class="dropdown text-end">
+    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+    </a>
+    <ul class="dropdown-menu text-small">
+        @* <li><a class="dropdown-item" href="#">New project...</a></li> *@
+        <li><a class="dropdown-item" href="#">Configuraciones...</a></li>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li class="dropdown-item">Hola, @User.Identity.Name</li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
             <form class="form-inline" asp-action="Logout" asp-controller="User">
-                <button type="submit" class="nav-link btn btn-link text-dark">
-                    Salir
-                </button>
-            </form>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link dark-text" asp-controller="User" asp-action="Registry">
-                Registro
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link dark-text" asp-controller="User" asp-action="Login">
-                Entrar
-            </a>
-        </li>
-    }
+<button type="submit" class="nav-link btn btn-link text-dark">
+Salir
+</button>
+</form>
+                    <a class="dropdown-item" asp-action="Logout" asp-controller="User">Salir</a>
+                </li>
+                @* <li class="nav-item">
+                    <form class="form-inline" >
+                        <button type="submit" class="nav-link btn btn-link text-dark">
+                            Salir
+                        </button>
+                    </form>
+                </li> *@
+            }
+            else
+            {
+                <li>
+                    <a class="dropdown-item" asp-controller="User" asp-action="Registry">
+                        Registro
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-controller="User" asp-action="Login">
+                        Entrar
+                    </a>
+                </li>
+            }
+    </ul>
+</div>
+
+<ul class="navbar-nav">
+    
 </ul>

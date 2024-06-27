@@ -108,16 +108,22 @@ namespace PruebaEntityFrameworkCore.Controllers
 
         public async Task<IActionResult> List(string confirmed = null, string remove = null)
         {
-            var userList = await this._context.Users.Select(x => new UserViewModel
-            {
-                User = x.UserName,
-                Email = x.Email,
-                Confirmed = x.EmailConfirmed
+            var userList =  await this._context.Users.ToListAsync();
+            var userRoleList = await this._context.UserRoles.ToListAsync();
 
-            }).ToListAsync();
+            var userDtoList = userList.GroupJoin(userRoleList, u => u.Id, ur => ur.UserId, 
+                (u, ur) => new UserViewModel  {
+                    User = u.UserName,
+                    Email = u.Email,
+                    Confirmed = u.EmailConfirmed,
+                    IsAdmin = ur.Any(ur => ur.UserId == u.Id)
+                })
+                .OrderBy(u => u.User)
+                .ToList();
+
 
             var modelo = new UserListViewModel();
-            modelo.UserList = userList;
+            modelo.UserList = userDtoList;
             modelo.MessageConfirmed = confirmed;
             modelo.MessageRemoved = remove;
 

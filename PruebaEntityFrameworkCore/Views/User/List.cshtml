@@ -32,6 +32,7 @@
                     <td>User</td>
                     <td>Email</td>
                     <td>Confirmed</td>
+                    <td>Administrator</td>
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +56,11 @@
                         <td>@usuario.User</td>
                         <td>@usuario.Email</td>
                         <td>@usuario.Confirmed</td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" asp-for="@usuario.IsAdmin"  disabled>
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>
