@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PruebaEntityFrameworkCore.Models;
+using PruebaEntityFrameworkCore.Services;
 
 namespace PruebaEntityFrameworkCore.Controllers
 {
@@ -103,7 +105,7 @@ namespace PruebaEntityFrameworkCore.Controllers
         }
 
 
-        public IActionResult List()
+        public IActionResult List(string msg = null)
         {
             var userList = this._context.Users.Select(x => new UserViewModel
             {
@@ -115,8 +117,26 @@ namespace PruebaEntityFrameworkCore.Controllers
 
             var userListViewModel    = new UserListViewModel();
             userListViewModel.UserList = userList;
+            userListViewModel.Message = msg;
 
             return View(userListViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> HacerAdmin(string email)
+        {
+            var usuario = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (usuario is null)
+            {
+                return NotFound();
+            }
+
+            await _userManager.AddToRoleAsync(usuario, MyConstants.RolAdmin);
+
+            return RedirectToAction("List",
+                routeValues: new { msg = "Rol asignado correctamente a " + email });
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PruebaEntityFrameworkCore.Services
 {
-    public class Constants
+    public class MyConstants
     {
         public const string RolAdmin = "admin";
     }
