@@ -20,13 +20,8 @@ builder.Services.AddControllersWithViews(
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// builder.Services.AddDbContext<ApplicationDbContext>(opciones
-//  => opciones.UseSqlServer("name=MyConnectionTrust"));
-
- builder.Services.AddDbContext<ApplicationDbContext>(opciones 
- => opciones.UseNpgsql("name=PostgresConnection"));
-
- AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+builder.Services.AddDbContext<ApplicationDbContext>(opciones
+ => opciones.UseSqlServer("name=SQLConnection"));
 
  builder.Services.AddAuthentication();
 
