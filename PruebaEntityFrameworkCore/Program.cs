@@ -1,3 +1,4 @@
+using ManejoPresupuesto.Servicios;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -34,7 +35,8 @@ builder.Services.AddControllersWithViews();
  builder.Services.AddIdentity<IdentityUser, IdentityRole>(
     opc =>  { opc.SignIn.RequireConfirmedAccount = false; }
 ).AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
+.AddDefaultTokenProviders()
+.AddErrorDescriber<MensajesDeErrorIdentity>();
 
 builder.Services.PostConfigure<CookieAuthenticationOptions>(
     IdentityConstants.ApplicationScheme, opc => 
