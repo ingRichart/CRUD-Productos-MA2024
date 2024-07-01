@@ -7,22 +7,29 @@
         aria-expanded="false">
         <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
     </a>
-    <ul class="dropdown-menu text-small">
-        @* <li><a class="dropdown-item" href="#">New project...</a></li> *@
-        <li><a class="dropdown-item" href="#">Configuraciones...</a></li>
+    <ul class="dropdown-menu text-medium">
             @if (SignInManager.IsSignedIn(User))
             {
                 <li class="dropdown-item">Hola, @User.Identity.Name</li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li>
-            <form class="form-inline" asp-action="Logout" asp-controller="User">
-<button type="submit" class="nav-link btn btn-link text-dark">
-Salir
-</button>
-</form>
-                    <a class="dropdown-item" asp-action="Logout" asp-controller="User">Salir</a>
+                <li class="dropdown-item" >
+                    <form asp-action="ChangePassword" asp-controller="User">
+                        <button type="submit" class="nav-link btn btn-link text-dark">
+                            Password
+                        </button>
+                    </form>
+                </li>
+                @* <li>
+                    <hr class="dropdown-divider">
+                </li> *@
+                <li class="dropdown-item">
+                    <form asp-action="Logout" asp-controller="User">
+                        <button type="submit" class="nav-link btn btn-link text-dark">
+                            Salir
+                        </button>
+                    </form>
                 </li>
                 @* <li class="nav-item">
                     <form class="form-inline" >

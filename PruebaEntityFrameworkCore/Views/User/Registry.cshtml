@@ -1,9 +1,9 @@
 @model RegistryViewModel
 @{
-    ViewData["Title"] = "Registro";
+    ViewData["Title"] = "Registrate";
 }
 
-<h1>Registrate</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div class="card">
     <div class="card-body">
@@ -23,9 +23,21 @@
                 <span asp-validation-for="Password" class="text-danger" ></span>
             </div>
 
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger" ></span>
+            </div>
 
-            <button class="btn btn-primary">Registrate</button>
-            <a class="btn btn-success" asp-action="Login" asp-controller="User">Entrar al Sistema</a>
+            <div class="mb-3">
+                <label asp-for="HelpPassword" class="form-label"></label>
+                <input asp-for="HelpPassword" class="form-control" />
+                <span asp-validation-for="HelpPassword" class="text-danger" ></span>
+            </div>
+
+
+            <button class="btn btn-outline-info">Registrate</button>
+            <a class="btn btn-outline-primary" asp-action="Login" asp-controller="User">Entrar al Sistema</a>
 
         </form>
     <div>

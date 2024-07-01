@@ -1,0 +1,35 @@
+@model List<RolViewModel>
+@{
+    ViewData["Title"] = "Lista de Roles de Usuario";
+    int numero = 0;
+}
+
+<h1>@ViewData["Title"]</h1>
+<a class="btn btn-outline-primary" asp-action="RolAdd" asp-asp-controller="Rol">Crear Rol de Usuario</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+        {
+            numero++;
+        }
+            <tr>
+                <th scope="row">@numero</th>
+                <td>@r.Name</td>
+                <td>
+                    <a class="btn btn-outline-info" asp-action="RolEdit" asp-controller="Rol" asp-route-id="@r.Id">Editar</a>
+                    <a class="btn btn-outline-danger" asp-action="RolDeleted" asp-controller="Rol" asp-route-id="@r.Id">Borrar</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>

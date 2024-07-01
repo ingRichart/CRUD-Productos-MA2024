@@ -19,5 +19,12 @@ namespace PruebaEntityFrameworkCore.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [DataType(DataType.Password)]
+        public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Ayuda para recordar el password")]
+        public string HelpPassword { get; set; }
     }
 }

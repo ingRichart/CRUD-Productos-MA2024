@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
+using PruebaEntityFrameworkCore.Entidades;
 using PruebaEntityFrameworkCore.Models;
 using PruebaEntityFrameworkCore.Services;
 
@@ -44,10 +45,11 @@ namespace PruebaEntityFrameworkCore.Controllers
                 return View(model);
             }
 
-            var user = new IdentityUser() 
+            var user = new ApplicationUser() 
             {
                 Email = model.Email,
-                UserName = model.Email
+                UserName = model.Email, 
+                HelpPassword = model.HelpPassword
             };
 
             var result = await _userManager.CreateAsync(user, password: model.Password);
@@ -165,6 +167,49 @@ namespace PruebaEntityFrameworkCore.Controllers
 
             return RedirectToAction("List",
                 routeValues: new { confirmed = "", remove = "Rol removido correctamente a " + email });
+        }
+    
+        public IActionResult ChangePassword(string confirmed = null)
+        {
+            var model = new ChangePasswordViewModel();
+            model.OldPassword = " ";
+            model.NewPassword = " ";
+            model.ConfirmPassword = " ";
+            model.MessageConfirmed = confirmed;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+
+                return View(model);
+
+            }
+
+            await _signInManager.RefreshSignInAsync(user);
+            return RedirectToAction("ChangePassword",
+                routeValues: new { confirmed = "El password se ha cambiado con éxito" });
+
         }
     }
 }

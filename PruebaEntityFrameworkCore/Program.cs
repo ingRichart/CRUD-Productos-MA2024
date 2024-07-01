@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PruebaEntityFrameworkCore;
+using PruebaEntityFrameworkCore.Entidades;
 
 var builder = WebApplication.CreateBuilder(args);
 
