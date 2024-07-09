@@ -1,0 +1,18 @@
+@model RolViewModel
+
+@{
+    ViewData["Title"] = "Borrar Roles de Usuario";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="RolDeleted" asp-controller="Rol">
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" asp-for="Name" placeholder="Nombre del Rol" readonly>
+        <label asp-for="Name">Nombre del Rol</label>
+    </div>
+
+    <button class="btn btn-outline-primary">Guardar</button>
+    <a class="btn btn-outline-secundary" asp-action="RolList" asp-controller="Rol">Regresar</a>
+</form>
